@@ -1,5 +1,4 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-
 export type ShortManifestResource =
   | "catalog"
   | "meta"
@@ -8,10 +7,8 @@ export type ShortManifestResource =
   | "addon_catalog";
 export type Extra = "search" | "genre" | "skip";
 export type ContentType = "movie" | "series" | "channel" | "tv";
-
 export type DefaultConfig = Record<string, any> | undefined;
 export type DefaultHandlerExtra = Record<string, any>;
-
 /**
  * Extra properties for catalog handlers
  */
@@ -20,12 +17,10 @@ export type CatalogHandlerExtra = {
    * String to search for in the catalog
    */
   search?: string;
-
   /**
    * A string to filter the feed or search results by genres
    */
   genre?: string;
-
   /**
    * Used for catalog pagination, refers to the number of items skipped from the beginning of the catalog.
    * The standard page size in Stremio is 100, so the `skip` value will be a multiple of 100.
@@ -33,7 +28,6 @@ export type CatalogHandlerExtra = {
    */
   skip?: number;
 };
-
 /**
  * Extra properties for subtitles handlers
  */
@@ -42,18 +36,15 @@ export type SubtitlesHandlerExtra = {
    * [OpenSubtitles file hash](http://trac.opensubtitles.org/projects/opensubtitles/wiki/HashSourceCodes) for the video
    */
   videoHash?: string;
-
   /**
    * Size of the video file in bytes
    */
   videoSize?: number;
-
   /**
    * Filename of the video file
    */
   filename?: string;
 };
-
 /**
  * Maps handler types to their specific Extra types
  */
@@ -64,13 +55,11 @@ export type HandlerExtraMap = {
   stream: DefaultHandlerExtra;
   addon_catalog: DefaultHandlerExtra;
 };
-
 /**
  * Conditional type that returns the appropriate Extra type based on the handler type
  */
 export type GetHandlerExtra<T extends ShortManifestResource> =
   T extends keyof HandlerExtraMap ? HandlerExtraMap[T] : DefaultHandlerExtra;
-
 /**
  * Generic handler arguments with conditional `Extra` typing
  */
@@ -84,8 +73,6 @@ export interface HandlerArgs<
   extra: TExtra;
   config: TConfig;
 }
-
-// Specific type aliases for each handler type
 export type CatalogHandlerArgs<Config = DefaultConfig> = HandlerArgs<
   "catalog",
   Config,
@@ -111,7 +98,6 @@ export type AddonCatalogHandlerArgs<Config = DefaultConfig> = HandlerArgs<
   Config,
   DefaultHandlerExtra
 >;
-
 /**
  * A resolving object can also include the following cache related properties
  */
@@ -130,9 +116,7 @@ export interface Cache {
    */
   staleError?: number;
 }
-
 export type WithCache<T> = T & Cache;
-
 /**
  * Summarized collection of meta items.
  *
@@ -200,9 +184,11 @@ export interface MetaPreview {
    *
    * @deprecated This will soon be deprecated in favor of `meta.trailers` being an array of Stream Objects.
    */
-  trailers?: Array<{ source: string; type: "Trailer" | "Clip" }>;
+  trailers?: Array<{
+    source: string;
+    type: "Trailer" | "Clip";
+  }>;
 }
-
 /**
  * Detailed description of a meta item.
  *
@@ -253,7 +239,10 @@ export interface MetaDetail extends MetaPreview {
    *
    * @deprecated This will soon be deprecated in favor of meta.trailers being an array of Stream Objects.
    */
-  trailers?: Array<{ source: string; type: "Trailer" | "Clip" }>;
+  trailers?: Array<{
+    source: string;
+    type: "Trailer" | "Clip";
+  }>;
   /**
    * Can be used to link to internal pages of Stremio.
    *
@@ -297,7 +286,6 @@ export interface MetaDetail extends MetaPreview {
       }
     | undefined;
 }
-
 export interface MetaLink {
   /**
    * Human readable name for the link.
@@ -315,7 +303,6 @@ export interface MetaLink {
    */
   url: string;
 }
-
 export interface MetaVideo {
   /**
    * ID of the video.
@@ -376,7 +363,6 @@ export interface MetaVideo {
    */
   overview?: string;
 }
-
 /**
  * Tells Stremio how to obtain the media content.
  *
@@ -548,7 +534,6 @@ export interface Stream {
       }
     | undefined;
 }
-
 /**
  * An object representing a streaming source.
  */
@@ -558,14 +543,12 @@ export interface StreamSource {
    * Depending on context: zip, rar, 7z, tar, tgz.
    */
   url: string;
-
   /**
    * Size of the file in bytes.
    * While optional, adding this can speed up the initial buffering.
    */
   bytes?: number;
 }
-
 /**
  * Subtitles resource for the chosen media.
  */
@@ -587,7 +570,6 @@ export interface Subtitle {
    */
   label?: string;
 }
-
 /**
  * The addon description and capabilities.
  *
@@ -640,24 +622,20 @@ export interface Manifest {
    * This can be used for an addon to act just as a catalog of other addons.
    */
   addonCatalogs?: ManifestCatalog[];
-
   /**
    * A list of settings that users can set for your addon.
    */
   config?: ManifestConfig[];
-
   /**
    * Background image for the addon.
    *
    * URL to png/jpg, at least 1024x786 resolution.
    */
   background?: string;
-
   /**
    * @deprecated use `logo` instead.
    */
   icon?: string;
-
   /**
    * Logo icon, URL to png, monochrome, 256x256.
    */
@@ -682,29 +660,24 @@ export interface Manifest {
          * Used to provide an adequate warning to the user.
          */
         p2p?: boolean;
-
         /**
          * Default is `false`. If the addon supports settings, it will add a button next to "Install" in Stremio that will point to the `/configure` path on the addon's domain. For more information, read [User Data](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md#user-data) (or if you are not using the Addon SDK, read: [Advanced User Data](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/advanced.md#using-user-data-in-addons) and [Creating Addon Configuration Pages](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/advanced.md#creating-addon-configuration-pages))
          */
         configurable?: boolean;
-
         /**
          * Default is `false`. If set to `true`, the "Install" button will not show for your addon in Stremio. Instead a "Configure" button will show pointing to the `/configure` path on the addon's domain. For more information, read [User Data](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/manifest.md#user-data) (or if you are not using the Addon SDK, read: [Advanced User Data](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/advanced.md#using-user-data-in-addons) and [Creating Addon Configuration Pages](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/advanced.md#creating-addon-configuration-pages))
          */
         configurationRequired?: boolean;
       }
     | undefined;
-
   stremioAddonsConfig?: StremioAddonsConfig;
 }
-
 export type ManifestConfigType =
   | "text"
   | "number"
   | "password"
   | "checkbox"
   | "select";
-
 /**
  * Addon setting.
  */
@@ -713,33 +686,27 @@ export interface ManifestConfig {
    * A key that will identify the user chosen value.
    */
   key: string;
-
   /**
    * The type of data that the setting stores.
    */
   type: ManifestConfigType;
-
   /**
    * The default value. For `type: "boolean"` this can be set to "checked" to default to enabled.
    */
   default?: string;
-
   /**
    * The title of the setting.
    */
   title?: string;
-
   /**
    * List of (string) choices for `type: "select"`
    */
   options?: string[];
-
   /**
    * If the value is required or not. Only applies to the following types: "string", "number". (default is `false`)
    */
   required?: boolean;
 }
-
 /**
  * Used as a response for defineResourceHandler.
  */
@@ -757,7 +724,6 @@ export interface AddonCatalog {
    */
   manifest: Manifest;
 }
-
 export interface FullManifestResource {
   /**
    * Resource name.
@@ -774,7 +740,6 @@ export interface FullManifestResource {
    */
   idPrefixes?: string[];
 }
-
 export interface ManifestCatalog {
   /**
    *  This is the content type of the catalog.
@@ -800,7 +765,6 @@ export interface ManifestCatalog {
    */
   extra?: ManifestExtra[];
 }
-
 export interface ManifestExtra {
   /**
    * The name of the property
@@ -832,12 +796,10 @@ export interface ManifestExtra {
    */
   optionsLimit?: number;
 }
-
 export interface StremioAddonsConfig {
   issuer: "https://stremio-addons.net";
   signature: string;
 }
-
 /**
  * The addonInterface, as returned from builder.getInterface()
  */
@@ -851,5 +813,5 @@ export interface AddonInterface {
     config?: Record<string, any>,
   ) => Promise<any>;
 }
-
 export type ManifestSchema = StandardSchemaV1<Manifest>;
+//# sourceMappingURL=types.d.ts.map
