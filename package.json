@@ -6,6 +6,7 @@
   "private": true,
   "packageManager": "pnpm@10.18.3",
   "scripts": {
+    "postinstall": "pnpm build",
     "build": "pnpm -r build",
     "build:watch": "pnpm -r --parallel build --watch",
     "clean": "pnpm -r exec rm -rf dist",
